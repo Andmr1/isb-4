@@ -69,8 +69,22 @@ def luhn_algo(card: int) -> str:
             return "Invalid"
 
 
+def make_statistic(settings: dict):
+    times = []
+    for i in range(int(settings["thread_number"])):
+        start = time()
+        logging.info(f'Thread number: {i+1}')
+        find_number(settings, i+1)
+        times.append(time() - start)
+    fig = plt.figure(figsize=(30, 5))
+    plt.ylabel('Time')
+    plt.xlabel('Threads')
+    plt.title('Dependence of time on number of threads')
+    plt.plot(list(x + 1 for x in range(int(settings["thread_number"]))), times, color='#004158')
+    plt.savefig(f'{settings["pic_path"]}')
+    logging.info(f'Picture has been saved into {settings["pic_path"]}')
 if __name__ == '__main__':
     with open("data/settings.json", "r") as f:
         settings = json.load(f)
-    find_number(settings, 6)
+    make_statistic(settings)
 
