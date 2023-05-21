@@ -9,6 +9,13 @@ from matplotlib import pyplot as plt
 
 
 def check_hash(settings: dict, first_digits: int, other_digits: int) -> int:
+    """
+    Function compares found card hash with the hash we have
+    :param settings:
+    :param first_digits:
+    :param other_digits:
+    :return:
+    """
     full_number = f'{first_digits}{other_digits}{settings["last_digits"]}'
     if hashlib.sha3_384(f'{full_number}'.encode()).hexdigest() == settings["hash"]:
         logging.info(f'Hash matched! Card number: {full_number}')
@@ -18,6 +25,12 @@ def check_hash(settings: dict, first_digits: int, other_digits: int) -> int:
 
 
 def find_number(settings: dict, streams: int) -> None:
+    """
+    Function finds card number with the same hash
+    :param settings:
+    :param streams: number of used threads
+    :return:
+    """
     completion = False
     with mp.Pool(streams) as pl:
         logging.info(f'Starting card number selection: {settings["first_digits"]}******{settings["last_digits"]}')
@@ -43,6 +56,11 @@ def find_number(settings: dict, streams: int) -> None:
 
 
 def luhn_algo(settings: dict) -> bool:
+    """
+    Card number validation check
+    :param settings:
+    :return: Validation status
+    """
     try:
         with open(settings["save_path"], "r") as f:
             data = json.load(f)
@@ -95,7 +113,12 @@ def luhn_algo(settings: dict) -> bool:
             return False
 
 
-def make_statistic(settings: dict):
+def make_statistic(settings: dict) -> None:
+    """
+    Function measures used time and makes a picture of dependence of time by number of used threads
+    :param settings:
+    :return:
+    """
     logging.info("Measuring statistic")
     times = []
     for i in range(int(settings["thread_number"])):
