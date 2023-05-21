@@ -26,10 +26,13 @@ def find_number(settings: dict, streams: int) -> None:
             if number:
                 pl.terminate()
                 completion = True
+                data = {}
+                data["card_number"] = f'{number}'
+                data["Validation_check"] = luhn_algo(number)
                 logging.info(f'Card number found! Saving into {settings["save_path"]}')
                 try:
                     with open(settings["save_path"], "w") as f:
-                        json.dump(number, f)
+                        json.dump(data, f)
                 except OSError as err:
                     logging.warning(f'{err} during writing to {settings["save_path"]}')
                 break
@@ -37,6 +40,35 @@ def find_number(settings: dict, streams: int) -> None:
                 break
     if completion is not True:
         logging.info("Card nuber not found")
+
+
+def luhn_algo(card: int) -> str:
+    card_number = f'{card}'
+    length = len(card_number)
+    if length != 16:
+        logging.info("Invalid card number")
+        return "Invalid"
+    else:
+        s = 0
+        for i in range(0, length - 1):
+            if(length - i) % 2 == 0:
+                if (int(card_number[i]) * 2) // 10 != 0:
+                    s = s + (int(card_number[i]) * 2) // 10 + (int(card_number[i]) * 2) % 10
+                else:
+                    s += (int(card_number[i]) * 2) // 10
+            else:
+                s += int(card_number[i])
+        s %= 10
+        s %= 10
+        s = 10 - s
+        if s == card % 10:
+            logging.info("Card number is valid")
+            return "Valid"
+        else:
+            logging.info("Invalid card number")
+            return "Invalid"
+
+
 if __name__ == '__main__':
     with open("data/settings.json", "r") as f:
         settings = json.load(f)
