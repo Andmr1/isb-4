@@ -12,9 +12,9 @@ def check_hash(settings: dict, first_digits: int, other_digits: int) -> int:
     """
     Function compares found card hash with the hash we have
     :param settings:
-    :param first_digits:
-    :param other_digits:
-    :return:
+    :param first_digits: First 6 digits of the BIN
+    :param other_digits: Last 4 digits of the BIN
+    :return: Number of card if hashes equivalent, and False if they are not
     """
     full_number = f'{first_digits}{other_digits}{settings["last_digits"]}'
     if hashlib.sha3_384(f'{full_number}'.encode()).hexdigest() == settings["hash"]:

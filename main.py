@@ -1,4 +1,4 @@
-from finding_digits import *
+from BIN_and_statistic import *
 from read import *
 import argparse
 logger = logging.getLogger()
