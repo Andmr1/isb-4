@@ -41,7 +41,7 @@ def find_number(settings: dict, streams: int) -> None:
                 completion = True
                 data = {}
                 data["card_number"] = f'{number}'
-                data["Validation_check"] = "Unknown"
+                data["validation_check"] = "Unknown"
                 logging.info(f'Card number found! Saving into {settings["save_path"]}')
                 try:
                     with open(settings["save_path"], "w") as f:
@@ -52,7 +52,7 @@ def find_number(settings: dict, streams: int) -> None:
             if completion:
                 break
     if completion is not True:
-        logging.info("Card nuber not found")
+        logging.info("Card number not found")
 
 
 def luhn_algo(settings: dict) -> bool:
@@ -93,8 +93,8 @@ def luhn_algo(settings: dict) -> bool:
         s = 10 - s
         if s == int(number[15]):
             logging.info("Card number is valid")
-            if data["Validation_check"] != "Unknown" or data["Validation_check"] != "Valid":
-                data["Validation_check"] = "Valid"
+            if data["validation_check"] != "Unknown" or data["Validation_check"] != "Valid":
+                data["validation_check"] = "Valid"
                 try:
                     with open(settings["save_path"], "w") as f:
                         json.dump(data, f)
@@ -103,8 +103,8 @@ def luhn_algo(settings: dict) -> bool:
             return True
         else:
             logging.info("Invalid card number")
-            if data["Validation_check"] != "Unknown" or data["Validation_check"] != "Invalid":
-                data["Validation_check"] = "Invalid"
+            if data["validation_check"] != "Unknown" or data["Validation_check"] != "Invalid":
+                data["validation_check"] = "Invalid"
                 try:
                     with open(settings["save_path"], "w") as f:
                         json.dump(data, f)
